@@ -33,37 +33,40 @@ export default function AdminBookingsPage() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    fetchBookings()
-  }, [router])
-
-  const fetchBookings = async () => {
-    try {
-      const token = localStorage.getItem("token")
-      if (!token) {
-        router.push("/login")
-        return
+    const fetchBookings = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          router.push("/login");
+          return;
+        }
+  
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/bookings/admin`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error("Failed to fetch bookings");
+        }
+  
+        const data = await response.json();
+        setBookings(data);
+      } catch (error) {
+        toast.error("Failed to load bookings", {
+          description: error instanceof Error ? error.message : "Please try again later"
+        });
+      } finally {
+        setIsLoading(false);
       }
-
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/bookings/admin`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch bookings")
-      }
-
-      const data = await response.json()
-      setBookings(data)
-    } catch (error) {
-      toast.error("Failed to load bookings", {
-        description: error instanceof Error ? error.message : "Please try again later"
-      })
-    } finally {
-      setIsLoading(false)
+    };
+  
+    if (typeof window !== "undefined") {
+      fetchBookings();
     }
-  }
+  }, [router]);
+  
 
   const filteredBookings = bookings.filter((booking) => {
     const matchesSearch =
