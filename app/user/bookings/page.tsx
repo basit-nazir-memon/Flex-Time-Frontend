@@ -27,11 +27,16 @@ export default function UserBookingsPage() {
   const [activeTab, setActiveTab] = useState("upcoming")
   const [bookings, setBookings] = useState<Booking[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const token = localStorage.getItem("token")
+        const token = mounted ? localStorage.getItem("token") : null
         if (!token) {
           toast.error("Please login to view your bookings")
           return
@@ -58,7 +63,9 @@ export default function UserBookingsPage() {
       }
     }
 
-    fetchBookings()
+    if (typeof window !== "undefined") {
+      fetchBookings()
+    }
   }, [])
 
   const filteredBookings = bookings.filter((booking) => {
@@ -79,6 +86,10 @@ export default function UserBookingsPage() {
         </div>
       </AppLayout>
     )
+  }
+
+  if (!mounted) {
+    return null
   }
 
   return (

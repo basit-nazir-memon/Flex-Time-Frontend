@@ -42,14 +42,16 @@ export default function TrainerProfilePage() {
   })
 
   useEffect(() => {
-    fetchProfile()
+    if (typeof window !== "undefined") {
+      fetchProfile()
+    }
   }, [router])
 
   const fetchProfile = async () => {
     setIsLoading(true)
     setError(null)
     try {
-      const token = localStorage.getItem("token")
+      const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null
       if (!token) {
         router.push("/login")
         return
@@ -105,7 +107,7 @@ export default function TrainerProfilePage() {
 
     setIsUploading(true)
     try {
-      const token = localStorage.getItem("token")
+      const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null
       if (!token) {
         router.push("/login")
         return
@@ -145,7 +147,7 @@ export default function TrainerProfilePage() {
     setIsSubmitting(true)
 
     try {
-      const token = localStorage.getItem("token")
+      const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null
       if (!token) {
         router.push("/login")
         return
@@ -201,7 +203,7 @@ export default function TrainerProfilePage() {
 
     setIsUploadingDocument(true)
     try {
-      const token = localStorage.getItem("token")
+      const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null
       if (!token) {
         router.push("/login")
         return

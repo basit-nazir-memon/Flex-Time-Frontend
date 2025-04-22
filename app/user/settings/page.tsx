@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -16,6 +16,12 @@ import { useRouter } from "next/navigation"
 
 export default function SettingsPage() {
   const router = useRouter()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   const {
     theme,
     setTheme,
@@ -81,7 +87,7 @@ export default function SettingsPage() {
 
     setIsChangingPassword(true)
     try {
-      const token = localStorage.getItem("token")
+      const token = mounted ? localStorage.getItem("token") : null
       if (!token) {
         router.push("/login")
         return
@@ -127,6 +133,10 @@ export default function SettingsPage() {
   const handlePasswordInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setPasswordData(prev => ({ ...prev, [name]: value }))
+  }
+
+  if (!mounted) {
+    return null
   }
 
   return (

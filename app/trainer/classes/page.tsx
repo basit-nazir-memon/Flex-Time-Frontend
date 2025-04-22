@@ -25,7 +25,7 @@ export default function TrainerClassesPage() {
       setIsLoading(true)
       setError(null)
       try {
-        const token = localStorage.getItem("token")
+        const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null
         if (!token) {
           router.push("/login")
           return

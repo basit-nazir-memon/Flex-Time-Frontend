@@ -37,11 +37,16 @@ export default function BookClassPage() {
   const [classData, setClassData] = useState<ClassData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const params = useParams()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const fetchClassData = async () => {
       try {
-        const token = localStorage.getItem("token")
+        const token = mounted ? localStorage.getItem("token") : null
         if (!token) {
           router.push("/login")
           return
@@ -70,13 +75,15 @@ export default function BookClassPage() {
       }
     }
 
-    fetchClassData()
+    if (typeof window !== "undefined") {
+      fetchClassData()
+    }
   }, [params.id, router])
 
   const handleBookClass = async () => {
     try {
       setIsBooking(true)
-      const token = localStorage.getItem("token")
+      const token = mounted ? localStorage.getItem("token") : null
       if (!token) {
         router.push("/login")
         return
@@ -124,6 +131,10 @@ export default function BookClassPage() {
         </div>
       </AppLayout>
     )
+  }
+
+  if (!mounted) {
+    return null
   }
 
   if (!classData) {

@@ -1,4 +1,6 @@
-"use client"
+'use client'
+
+export const dynamic = 'force-dynamic'
 
 import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -81,7 +83,7 @@ export default function TrainerSettingsPage() {
 
     setIsChangingPassword(true)
     try {
-      const token = localStorage.getItem("token")
+      const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null
       if (!token) {
         router.push("/login")
         return

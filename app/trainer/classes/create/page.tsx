@@ -57,7 +57,7 @@ export default function CreateClassPage() {
 
     try {
       // Get token from localStorage
-      const token = localStorage.getItem('token')
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
       if (!token) {
         throw new Error('Authentication required')
       }

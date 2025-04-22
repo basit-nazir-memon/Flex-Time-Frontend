@@ -29,7 +29,7 @@ export default function TrainersPage() {
   useEffect(() => {
     const fetchTrainers = async () => {
       try {
-        const token = localStorage.getItem("token")
+        const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null
         if (!token) {
           router.push("/login")
           return
@@ -56,7 +56,9 @@ export default function TrainersPage() {
       }
     }
 
-    fetchTrainers()
+    if (typeof window !== "undefined") {
+      fetchTrainers()
+    }
   }, [router])
 
   const filteredTrainers = trainers.filter(

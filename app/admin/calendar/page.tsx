@@ -1,5 +1,7 @@
 "use client"
 
+export const dynamic = 'force-dynamic'
+
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -80,11 +82,11 @@ export default function AdminCalendarPage() {
   }
 
   if (isLoading) {
-    return (
-      <AppLayout userRole="admin" userName="Admin User">
-        <div className="flex flex-col gap-6">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Calendar</h1>
+  return (
+    <AppLayout userRole="admin" userName="Admin User">
+      <div className="flex flex-col gap-6">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Calendar</h1>
             <p className="text-muted-foreground">Loading classes...</p>
           </div>
           <div className="flex justify-center items-center h-64">

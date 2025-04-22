@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
 import { Calendar, Home, Users, Dumbbell, BookOpen, Settings, LogOut, Menu, X, User } from "lucide-react"
@@ -25,8 +25,7 @@ type NavItem = {
 type Props = {
   children: React.ReactNode
   userRole: "admin" | "trainer" | "user"
-  userName: string
-  userImage?: string
+  userName?: string
 }
 
 export default function AppLayout({ children, userRole }: Props) {
@@ -36,20 +35,31 @@ export default function AppLayout({ children, userRole }: Props) {
   const isMobile = useMediaQuery("(max-width: 768px)")
   const { theme } = useThemeContext()
   const { t } = useTranslation()
-  const userName = localStorage.getItem('name') || ''
-  const userImage = localStorage.getItem('avatar') || ''
+  const [mounted, setMounted] = useState(false)
+  const [userName, setUserName] = useState('')
+  const [userImage, setUserImage] = useState('')
+
+  useEffect(() => {
+    setMounted(true)
+    if (typeof window !== 'undefined') {
+      setUserName(localStorage.getItem('name') || '')
+      setUserImage(localStorage.getItem('avatar') || '')
+    }
+  }, [])
 
   const handleLogout = () => {
-    // Clear all authentication data
-    localStorage.removeItem('token')
-    localStorage.removeItem('role')
-    localStorage.removeItem('user')
-    localStorage.removeItem('name')
-    localStorage.removeItem('avatar')
+    if (typeof window !== 'undefined') {
+      // Clear all authentication data
+      localStorage.removeItem('token')
+      localStorage.removeItem('role')
+      localStorage.removeItem('user')
+      localStorage.removeItem('name')
+      localStorage.removeItem('avatar')
 
-    // Clear cookies
-    document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT'
-    document.cookie = 'role=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT'
+      // Clear cookies
+      document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT'
+      document.cookie = 'role=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT'
+    }
 
     // Redirect to login page
     router.push('/auth/login')

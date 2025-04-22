@@ -36,11 +36,16 @@ interface DashboardData {
 export default function UserDashboard() {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const token = localStorage.getItem("token")
+        const token = mounted ? localStorage.getItem("token") : null
         if (!token) {
           toast.error("Please login to view your dashboard")
           return
@@ -68,7 +73,9 @@ export default function UserDashboard() {
       }
     }
 
-    fetchDashboardData()
+    if (typeof window !== "undefined") {
+      fetchDashboardData()
+    }
   }, [])
 
   if (isLoading) {
@@ -92,6 +99,10 @@ export default function UserDashboard() {
         </div>
       </AppLayout>
     )
+  }
+
+  if (!mounted) {
+    return null
   }
 
   return (

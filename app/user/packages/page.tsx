@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -19,6 +19,11 @@ const CheckoutForm = ({ packageType, amount, onSuccess, onError }) => {
   const stripe = useStripe()
   const elements = useElements()
   const [isProcessing, setIsProcessing] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -29,7 +34,7 @@ const CheckoutForm = ({ packageType, amount, onSuccess, onError }) => {
 
     setIsProcessing(true)
     try {
-      const token = localStorage.getItem("token")
+      const token = mounted ? localStorage.getItem("token") : null
       if (!token) {
         toast.error("Please login to purchase a package")
         return

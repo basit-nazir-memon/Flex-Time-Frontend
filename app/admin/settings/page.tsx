@@ -1,6 +1,5 @@
 "use client"
-
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -16,6 +15,7 @@ import { useRouter } from "next/navigation"
 
 export default function AdminSettingsPage() {
   const router = useRouter()
+  const [mounted, setMounted] = useState(false)
   const {
     theme,
     setTheme,
@@ -31,6 +31,10 @@ export default function AdminSettingsPage() {
     newPassword: "",
     confirmPassword: "",
   })
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const handleThemeChange = (checked: boolean) => {
     const newTheme = checked ? "dark" : "light"
@@ -81,7 +85,7 @@ export default function AdminSettingsPage() {
 
     setIsChangingPassword(true)
     try {
-      const token = localStorage.getItem("token")
+      const token = mounted ? localStorage.getItem("token") : null
       if (!token) {
         router.push("/login")
         return
@@ -127,6 +131,10 @@ export default function AdminSettingsPage() {
   const handlePasswordInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setPasswordData(prev => ({ ...prev, [name]: value }))
+  }
+
+  if (!mounted) {
+    return null
   }
 
   return (
