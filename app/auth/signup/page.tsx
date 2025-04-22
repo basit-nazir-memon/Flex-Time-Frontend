@@ -13,6 +13,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useThemeContext } from "@/contexts/theme-context"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import config from "../../../config"
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google"
 export default function SignupPage() {
   const router = useRouter()
   const [role, setRole] = useState<"user" | "trainer">("user")
@@ -199,7 +200,7 @@ export default function SignupPage() {
                 </div>
               </div>
 
-              <Button variant="outline" className="w-full" type="button" disabled={isLoading}>
+              {/* <Button variant="outline" className="w-full" type="button" disabled={isLoading}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -219,7 +220,38 @@ export default function SignupPage() {
                   <line x1="10.88" x2="15.46" y1="21.94" y2="14"></line>
                 </svg>
                 Google
-              </Button>
+              </Button> */}
+
+              <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
+                <GoogleLogin
+                  onSuccess={(credentialResponse) => {
+                    // Send the Google ID token to your backend
+                    fetch( `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google/token-login`, {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        token: credentialResponse.credential,
+                      }),
+                    })
+                      .then((res) => res.json())
+                      .then((data) => {
+                        localStorage.setItem("token", data.token);
+                        localStorage.setItem("role", data.user.role);
+                        localStorage.setItem("user", JSON.stringify(data.user));
+                        localStorage.setItem("name", data.user.name);
+                        localStorage.setItem("avatar", data.user.avatar);
+
+                        // console.log(data);
+
+                        // Redirect based on the role returned from the server
+                        setTimeout(() => {
+                          router.push(`/${data.user.role}`);
+                        }, 1000);
+                      });
+                  }}
+                  onError={() => console.log("Google Login Failed")}
+                />
+              </GoogleOAuthProvider>
             </>
           )}
         </CardContent>

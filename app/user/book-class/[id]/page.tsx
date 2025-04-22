@@ -39,14 +39,11 @@ export default function BookClassPage() {
   const params = useParams()
   const [mounted, setMounted] = useState(false)
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   useEffect(() => {
     const fetchClassData = async () => {
       try {
-        const token = mounted ? localStorage.getItem("token") : null
+        const token = localStorage.getItem("token")
         if (!token) {
           router.push("/login")
           return

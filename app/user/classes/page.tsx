@@ -33,16 +33,11 @@ export default function ClassesPage() {
   const [selectedTrainer, setSelectedTrainer] = useState("")
   const [classes, setClasses] = useState<Class[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const token = mounted ? localStorage.getItem("token") : null
+        const token = localStorage.getItem("token")
         if (!token) {
           router.push("/login")
           return
@@ -102,10 +97,6 @@ export default function ClassesPage() {
         </div>
       </AppLayout>
     )
-  }
-
-  if (!mounted) {
-    return null
   }
 
   return (

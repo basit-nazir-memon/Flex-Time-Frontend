@@ -45,7 +45,7 @@ export default function UserDashboard() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const token = mounted ? localStorage.getItem("token") : null
+        const token = localStorage.getItem("token")
         if (!token) {
           toast.error("Please login to view your dashboard")
           return
@@ -73,9 +73,7 @@ export default function UserDashboard() {
       }
     }
 
-    if (typeof window !== "undefined") {
-      fetchDashboardData()
-    }
+    fetchDashboardData()
   }, [])
 
   if (isLoading) {

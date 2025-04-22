@@ -30,13 +30,9 @@ export default function UserBookingsPage() {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const token = mounted ? localStorage.getItem("token") : null
+        const token = localStorage.getItem("token")
         if (!token) {
           toast.error("Please login to view your bookings")
           return
@@ -86,10 +82,6 @@ export default function UserBookingsPage() {
         </div>
       </AppLayout>
     )
-  }
-
-  if (!mounted) {
-    return null
   }
 
   return (

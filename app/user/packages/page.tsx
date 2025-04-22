@@ -19,11 +19,6 @@ const CheckoutForm = ({ packageType, amount, onSuccess, onError }) => {
   const stripe = useStripe()
   const elements = useElements()
   const [isProcessing, setIsProcessing] = useState(false)
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -34,7 +29,7 @@ const CheckoutForm = ({ packageType, amount, onSuccess, onError }) => {
 
     setIsProcessing(true)
     try {
-      const token = mounted ? localStorage.getItem("token") : null
+      const token = localStorage.getItem("token")
       if (!token) {
         toast.error("Please login to purchase a package")
         return
