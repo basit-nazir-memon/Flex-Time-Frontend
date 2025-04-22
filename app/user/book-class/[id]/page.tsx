@@ -37,7 +37,7 @@ export default function BookClassPage() {
   const [classData, setClassData] = useState<ClassData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const params = useParams()
-  const [mounted, setMounted] = useState(false)
+  // const [mounted, setMounted] = useState(false)
 
 
   useEffect(() => {
@@ -80,7 +80,7 @@ export default function BookClassPage() {
   const handleBookClass = async () => {
     try {
       setIsBooking(true)
-      const token = mounted ? localStorage.getItem("token") : null
+      const token = localStorage.getItem("token")
       if (!token) {
         router.push("/login")
         return
@@ -99,7 +99,7 @@ export default function BookClassPage() {
 
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(errorData.message || "Failed to book class")
+        throw new Error(errorData.error || "Failed to book class")
       }
 
       const data = await response.json()
@@ -128,10 +128,6 @@ export default function BookClassPage() {
         </div>
       </AppLayout>
     )
-  }
-
-  if (!mounted) {
-    return null
   }
 
   if (!classData) {

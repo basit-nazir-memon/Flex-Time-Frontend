@@ -37,9 +37,18 @@ export default function UserDashboard() {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [mounted, setMounted] = useState(false)
+  const [userName, setUserName] = useState("")
+
 
   useEffect(() => {
     setMounted(true)
+    // Get user name from localStorage
+    if (typeof window !== 'undefined') {
+      const name = localStorage.getItem("name")
+      if (name) {
+        setUserName(name || "")
+      }
+    }
   }, [])
 
   useEffect(() => {
@@ -104,11 +113,11 @@ export default function UserDashboard() {
   }
 
   return (
-    <AppLayout userRole="user" userName="Jane User">
+    <AppLayout userRole="user" userName={userName}>
       <div className="flex flex-col gap-6">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">User Dashboard</h1>
-          <p className="text-muted-foreground">Welcome back, Jane. Here's your fitness overview.</p>
+          <p className="text-muted-foreground">Welcome back, {userName}. Here's your fitness overview.</p>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2">

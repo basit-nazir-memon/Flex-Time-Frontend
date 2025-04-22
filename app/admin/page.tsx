@@ -58,7 +58,7 @@ export default function AdminDashboard() {
           </Card>
         </div>
 
-        <Tabs defaultValue="upcoming" className="w-full">
+        {/* <Tabs defaultValue="upcoming" className="w-full">
           <TabsList>
             <TabsTrigger value="upcoming">Upcoming Classes</TabsTrigger>
             <TabsTrigger value="recent">Recent Transactions</TabsTrigger>
@@ -110,7 +110,7 @@ export default function AdminDashboard() {
               </CardContent>
             </Card>
           </TabsContent>
-        </Tabs>
+        </Tabs> */}
       </div>
     </AppLayout>
   )

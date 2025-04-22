@@ -65,7 +65,7 @@ const CheckoutForm = ({ packageType, amount, onSuccess, onError }) => {
         onError(result.error.message)
       } else {
         if (result.paymentIntent.status === "succeeded") {
-          onSuccess()
+          onSuccess(result.paymentIntent.id)
         }
       }
     } catch (error) {
@@ -125,13 +125,15 @@ export default function PackagesPage() {
   //   body: JSON.stringify({}),
   // })
 
-  const handlePaymentSuccess = () => {
+  const handlePaymentSuccess = async ( paymentIntentId: string ) => {
+
     const packageDetails = {
       type: selectedPackage,
       name: selectedPackage === "standard" ? "Standard Package" : "Premium Package",
       hours: selectedPackage === "standard" ? "10 Hours" : "20 Hours",
       price: selectedPackage === "standard" ? "350.00" : "600.00",
       validity: selectedPackage === "standard" ? "3 months" : "6 months",
+      payment_intent_id: paymentIntentId,
     }
 
     const queryParams = new URLSearchParams({
@@ -142,7 +144,24 @@ export default function PackagesPage() {
       validity: packageDetails.validity,
     } as Record<string, string>)
 
-    toast.success("Payment successful!")
+    //send reqquest to backend at /payments/success
+    const token = localStorage.getItem("token")
+    if (!token) {
+      toast.error("Please login to purchase a package")
+      return
+    }
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/payments/payment-success`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(packageDetails),
+    })
+    if (!response.ok) {
+      toast.error("Payment failed")
+      return
+    }
     router.push(`/user/payment-success?${queryParams.toString()}`)
   }
 

@@ -206,7 +206,7 @@ export default function TrainerClassesPage() {
                               </div>
                             </div>
                           </div>
-                          <div className="flex gap-2">
+                          {/* <div className="flex gap-2">
                             <Button variant="outline" size="sm" onClick={() => handleViewClass(cls.id)}>
                               View Details
                             </Button>
@@ -219,7 +219,7 @@ export default function TrainerClassesPage() {
                               <Edit className="h-4 w-4 mr-1" />
                               Edit
                             </Button>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>
@@ -306,11 +306,11 @@ export default function TrainerClassesPage() {
                               </div>
                             </div>
                           </div>
-                          <div className="flex gap-2">
+                          {/* <div className="flex gap-2">
                             <Button variant="outline" size="sm" onClick={() => handleViewClass(cls.id)}>
                               View Details
                             </Button>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>
