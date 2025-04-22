@@ -34,14 +34,16 @@ export default function AdminBookingsPage() {
   const [activeTab, setActiveTab] = useState("confirmed")
   const [bookings, setBookings] = useState<Booking[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
     fetchBookings()
-  }, [router])
+  }, [])
 
   const fetchBookings = async () => {
     try {
-      const token = localStorage.getItem("token")
+      const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null
       if (!token) {
         router.push("/login")
         return
@@ -84,6 +86,10 @@ export default function AdminBookingsPage() {
 
   // Get unique trainers for filter
   const trainers = [...new Set(bookings.map((booking) => booking.trainer))]
+
+  if (!mounted) {
+    return null
+  }
 
   if (isLoading) {
     return (
