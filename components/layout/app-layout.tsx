@@ -277,7 +277,12 @@ export default function AppLayout({ children, userRole }: Props) {
 
         {/* Main Content */}
         <main className="flex-1 overflow-auto">
-          <div className="container mx-auto py-6 px-4 md:px-6 max-w-6xl">{children}</div>
+          <div className={cn(
+            "container mx-auto py-6 px-4 md:px-6 max-w-6xl",
+            isMobile && "pb-20"
+          )}>
+            {children}
+          </div>
         </main>
       </div>
 
